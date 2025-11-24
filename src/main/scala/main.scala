@@ -123,7 +123,7 @@ case class MontyHallGame(doorNum: Int, candidate1stChoice: Int) {
    * @param o_newChoice the optional new choice to use
    * @return
    */
-  def playRoundTwo(o_newChoice: Option[Int]): Boolean = {
+  def playRoundTwoWithNewChoice(o_newChoice: Option[Int]): Boolean = {
     // sanity check
     require(o_newChoice.forall(_ == playRoundOne), s"Invalid 2nd choice: ${o_newChoice.get} while there is only door #$playRoundOne remaining.")
 
@@ -131,6 +131,9 @@ case class MontyHallGame(doorNum: Int, candidate1stChoice: Int) {
       .map(_ == winningDoor) // when there is a 2nd choice, transform newChoice into true if it matches the winning door, false otherwise
       .getOrElse(candidate1stChoice == winningDoor) // get and return the above result if there was a 2nd choice or (if no 2nd choice) return true if the first choice is the winning door, false otherwise
   }
+
+  // alias to make the code more readable
+  def playRoundTwoKeeping1stChoice: Boolean = playRoundTwoWithNewChoice(None)
 
 }  
   
@@ -150,7 +153,8 @@ def main(): Unit = {
 
   /**
    * The number of games to simulate: note that given the non-optimized way this simulation is done
-   * (no optimization to keep the code understandable), it will use a lot of memory
+   * (no optimization and simple transformations to keep the code understandable by non-programmers), it will use a
+   * lot of extra memory
    */
   val TRIALS_NUMBER = 100_000
 
@@ -166,7 +170,7 @@ def main(): Unit = {
       playerRandomGen.between(0, doorNum) // the player randomly chooses a door
     ))
     // play each game never changing our initial choice (equivalent to playing round2 directly with no second choice)
-    val gameResults = games.map(_.playRoundTwo(None))
+    val gameResults = games.map(_.playRoundTwoKeeping1stChoice)
 
     gameResults.count(_ == true).toDouble / TRIALS_NUMBER.toDouble
   }
@@ -187,7 +191,7 @@ def main(): Unit = {
       .map { g =>
       val remainingDoor = g.playRoundOne
 
-      g.playRoundTwo(Some(remainingDoor))
+      g.playRoundTwoWithNewChoice(Some(remainingDoor))
     }
 
     gameResults.count(_ == true).toDouble / TRIALS_NUMBER.toDouble
