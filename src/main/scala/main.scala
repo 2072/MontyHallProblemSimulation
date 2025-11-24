@@ -1,5 +1,5 @@
 /**
- * CCopyright (c) 2025 John Wellesz
+ * Copyright (c) 2025 John Wellesz
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the “Software”), to deal in
@@ -137,8 +137,8 @@ case class MontyHallGame(doorNum: Int, candidate1stChoice: Int) {
 @main
 def main(): Unit = {
 
-  // Not necessary but we use a different number generator for the player because we are simulating two distinct systems
-  // interacting, the constructor is seeding them with a different value according to Java's documentation but using
+  // This is not necessary, but we use a different number generator for the player because we are simulating two distinct systems
+  // interacting with each other, the constructor is seeding them with a different value according to Java's documentation but using
   // MontyHallGame.gameRandomGen instead would yield the exact same results
   val playerRandomGen = new Random()
 
@@ -150,7 +150,7 @@ def main(): Unit = {
 
   /**
    * The number of games to simulate: note that given the non-optimized way this simulation is done
-   * (no optimization to keep the code understandable), it will use a lot of memories
+   * (no optimization to keep the code understandable), it will use a lot of memory
    */
   val TRIALS_NUMBER = 100_000
 
